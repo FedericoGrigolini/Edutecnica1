@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
@@ -5,7 +6,6 @@ import java.util.Scanner;
 public class Garage {
 	protected LinkedList<Veicolo> park;
 	public Garage(){
-
 		this.park = new LinkedList();
 	}
 	
@@ -27,24 +27,27 @@ public class Garage {
 	}
 	
 	public String infoOccupante(int x){
-		return park.get(x).toString();
+		if(x<park.size())
+			return park.get(x).toString();
+		return "Nessun veicolo disponibile in questa posizione";
 	}
 	
 	public void registraVeicolo(){
 		Scanner s=new Scanner(System.in);
 		String marca,ali;
 		int cyl, anno, extra,i;
-		System.out.printf("Scegliere l'operazione:\n"
+		System.out.println("Scegliere l'operazione:\n"
 				+ "1) ingresso moto\n"
 				+ "2) ingresso automobile\n"
 				+ "3) ingresso furgone\n"
 				+ "4) esci\n");
 		i=s.nextInt();
-		s.hasNextLine();
+		s.nextLine();
 		switch(i){
 			case 1:{
 				System.out.print("Inserire Marca: ");
 				marca=s.next();
+				s.nextLine(); 
 				System.out.print("Inserire Cilindrata: ");
 				cyl=s.nextInt();
 				s.nextLine();
@@ -54,7 +57,6 @@ public class Garage {
 				System.out.print("Inserire Tempi: ");
 				extra=s.nextInt();
 				s.nextLine();
-				s.close();
 				this.ingresso(new Moto(marca, cyl, anno, extra));
 				break;
 				
@@ -73,7 +75,6 @@ public class Garage {
 				s.nextLine();
 				System.out.print("Inserire Alimentazione: ");
 				ali=s.nextLine();
-				s.close();
 				this.ingresso( new Automobile(marca, ali, cyl, anno, extra));
 				break;
 				
@@ -90,19 +91,16 @@ public class Garage {
 				System.out.print("Inserire Capacità: ");
 				extra=s.nextInt();
 				s.nextLine();
-				s.close();
 				this.ingresso(new Furgone(marca, cyl, anno, extra));
 				break;
 			}
 			case 4:
 			{
 				System.out.println("Operazione annullata.");
-				s.close();
 				break;
 			}
 			default:{
 				System.out.println("Operazione non valida.");
-				s.close();
 				break;
 			}
 		}
@@ -112,12 +110,19 @@ public class Garage {
 	
 	private void ingresso(Veicolo v){
 		if(park.isEmpty()){
+			v.id=1;
 			park.add(v);
-		}
-		if(park.size()<15){
-			park.add(findSpot(park), v);
+			System.out.println("Parcheggiato in posizione 1");
 		}else{
-			System.out.println("Parcheggio Pieno, impossibile aggiungere Veicolo");
+			if(park.size()<15){
+				int i=findSpot(park);
+				v.id=i;
+				park.add(i, v);
+				i++;
+				System.out.println("Parcheggiato in posizione "+ i);
+			}else{
+				System.out.println("Parcheggio Pieno, impossibile aggiungere Veicolo");
+			}
 		}
 		
 	}
@@ -173,21 +178,23 @@ public class Garage {
 		park.removeAll(park);
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Garage G = new Garage();
 		Scanner input=new Scanner(System.in);
-
 		boolean menu=true;
+		//G.registraVeicolo();
 		while(menu){
-			System.out.printf("Scegliere l'operazione:\n"
+			int p;
+			
+			System.out.println("Scegliere l'operazione:\n"
 					+ "1) ingresso veicolo\n"
 					+ "2) uscita veicolo\n"
 					+ "3) visualizza veicolo\n"
 					+ "4) svuota parcheggio\n"
 					+ "5) Visualizza posti occupati\n"
 					+ "6) esci\n");
-				int p=input.nextInt();
-				input.nextLine();
+			p= input.nextInt();
+			input.nextLine();
 			switch(p){
 			case 1:{
 				G.registraVeicolo();
@@ -201,10 +208,10 @@ public class Garage {
 				break;
 			}
 			case 3:{
-				System.out.println("Inserire quale posto si vuole liberare");
+				System.out.println("Inserire quale posto si vuole visualizzaree");
 				int index = input.nextInt();
 				input.nextLine();
-				G.infoOccupante(index);
+				System.out.println(G.infoOccupante(index));
 				break;
 			}
 			case 4:{
@@ -219,12 +226,16 @@ public class Garage {
 				menu=false;
 				break;
 			}
+			case 0:{
+				System.out.println("op");
+				break;
+			}
 			default:{
 				System.out.println("Commando non valido");
 			}
-			}
+			}		
 		}	
-		input.close();
+		input.close();	
 	}
 	
 }
