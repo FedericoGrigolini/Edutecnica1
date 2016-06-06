@@ -1,9 +1,7 @@
-/Bin2Dec.class
-/divisori.class
-/numCifre.class
-/primi.class
-/tasso.class
-/Intersezione.class
-/pow.class
-/Potenza.class
-/CC.class
+/Motore.class
+/Punta.class
+/Veicolo.class
+/Moto.class
+/Automobile.class
+/Furgone.class
+/Garage.class
