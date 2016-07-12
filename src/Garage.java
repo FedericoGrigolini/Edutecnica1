@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
@@ -236,6 +238,34 @@ public class Garage {
 			}		
 		}	
 		input.close();	
+	}
+	
+	
+	
+	public void bohhh (){
+		String s;
+		try {
+			Method pippo = Garage.class.getMethod("ingresso", Veicolo.class);
+			pippo.setAccessible(true);
+			pippo.invoke(new Moto("marca",1,2,3) );
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.toString();
 	}
 	
 }
